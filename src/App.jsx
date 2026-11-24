@@ -12,7 +12,7 @@ const WHATSAPP_NUMBER = '573147287039';
 
 // Corona 3D azul con fondo transparente
 const Crown = ({ className = '' }) => (
-  <img className={`crown-img ${className}`} src="/images/corona-azul.png" alt="" aria-hidden="true" draggable="false" />
+  <img className={`crown-img ${className}`} src={`${import.meta.env.BASE_URL}images/corona-azul.png`} alt="" aria-hidden="true" draggable="false" />
 );
 
 function getTimeLeft() {
@@ -83,7 +83,7 @@ function App() {
 
       <section className="hero" id="inicio">
         <div className="hero-photo">
-          <img src="/images/yalena-vestido-azul.png" alt="Yalena con vestido azul de quinceañera" />
+          <img src={`${import.meta.env.BASE_URL}images/yalena-vestido-azul.png`} alt="Yalena con vestido azul de quinceañera" />
           <div className="photo-glow" />
         </div>
         <div className="hero-copy">

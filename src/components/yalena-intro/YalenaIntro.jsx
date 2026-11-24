@@ -10,7 +10,7 @@ import './YalenaIntro.css';
  */
 export default function YalenaIntro({
   onOpen,
-  imageSrc = '/images/yalena-vestido-azul.png',
+  imageSrc = `${import.meta.env.BASE_URL}images/yalena-vestido-azul.png`,
   name = 'Yalena Yisel Peña Bertel',
   date = '31 · 12 · 2026',
   time = '7:00 pm',
@@ -63,7 +63,7 @@ export default function YalenaIntro({
 
       <div className="yi-content">
         <div className="yi-crown" aria-hidden="true">
-          <img src="/images/corona-azul.png" alt="" draggable="false" />
+          <img src={`${import.meta.env.BASE_URL}images/corona-azul.png`} alt="" draggable="false" />
         </div>
 
         <p className="yi-overline">Una invitación muy especial</p>
