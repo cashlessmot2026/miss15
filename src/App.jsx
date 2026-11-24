@@ -1,14 +1,19 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import {
-  CalendarDays, MapPin, Clock3, Heart, Crown, CheckCircle2,
-  UsersRound, Sparkles, Menu, X, Music2, Flower2, Gift, Mail
+  CalendarDays, MapPin, Clock3, Heart, CheckCircle2,
+  UsersRound, Sparkles, Menu, X, Flower2, Gift, Mail
 } from 'lucide-react';
+import YalenaIntro from './components/yalena-intro/YalenaIntro.jsx';
 
 const EVENT_DATE = new Date('2026-12-31T19:00:00-05:00');
 // Reemplaza este valor por el número de WhatsApp de quien recibirá las confirmaciones.
 // Formato internacional, solo números. Ejemplo Colombia: 573001234567
 const WHATSAPP_NUMBER = '573147287039';
-const VIDEO_FILE = '/video-invitacion.mp4'; // Opcional: agrega tu video en la carpeta public.
+
+// Corona 3D azul con fondo transparente
+const Crown = ({ className = '' }) => (
+  <img className={`crown-img ${className}`} src="/images/corona-azul.png" alt="" aria-hidden="true" draggable="false" />
+);
 
 function getTimeLeft() {
   const distance = EVENT_DATE.getTime() - Date.now();
@@ -24,10 +29,18 @@ function getTimeLeft() {
 function App() {
   const [left, setLeft] = useState(getTimeLeft);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [videoAvailable, setVideoAvailable] = useState(true);
+  const [introDone, setIntroDone] = useState(false);
   const [guestName, setGuestName] = useState('');
   const [guests, setGuests] = useState('1');
   const [showRSVP, setShowRSVP] = useState(false);
+
+  // Mientras se muestra la intro, la página de fondo no hace scroll
+  useEffect(() => {
+    const v = introDone ? '' : 'hidden';
+    document.body.style.overflow = v;
+    document.documentElement.style.overflow = v;
+    return () => { document.body.style.overflow = ''; document.documentElement.style.overflow = ''; };
+  }, [introDone]);
 
   useEffect(() => {
     const timer = window.setInterval(() => setLeft(getTimeLeft()), 1000);
@@ -53,10 +66,12 @@ function App() {
   ];
 
   return (
-    <main>
+    <>
+    {!introDone && <YalenaIntro onOpen={() => setIntroDone(true)} />}
+    <main className={introDone ? 'landing-enter' : ''}>
       <div className="ambient ambient-one" /><div className="ambient ambient-two" />
       <header className="topbar">
-        <a className="brand" href="#inicio" aria-label="Inicio"><Crown size={30}/></a>
+        <a className="brand" href="#inicio" aria-label="Inicio"><Crown/></a>
         <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label="Abrir menú">
           {menuOpen ? <X/> : <Menu/>}
         </button>
@@ -72,7 +87,7 @@ function App() {
           <div className="photo-glow" />
         </div>
         <div className="hero-copy">
-          <div className="crown-mark"><Crown size={66}/><span>Mis</span></div>
+          <div className="crown-mark"><Crown/><span>Mis</span></div>
           <p className="eyebrow">Una noche mágica para celebrar</p>
           <h1>15 <em>Años</em></h1>
           <div className="ornament"><span/><Heart size={17}/><span/></div>
@@ -119,14 +134,6 @@ function App() {
         <div className="envelope-sparkle"><Sparkles size={24}/></div>
       </section>
 
-      <section className="video-section">
-        <h2>Un recuerdo para compartir</h2>
-        <p>Un pequeño adelanto de esta celebración llena de magia.</p>
-        {videoAvailable && <video controls playsInline preload="metadata" poster="/images/invitacion-referencia.png">
-          <source src={VIDEO_FILE} type="video/mp4" onError={() => setVideoAvailable(false)} />
-        </video>}
-        {!videoAvailable && <div className="video-placeholder"><Music2/><span>Agrega tu video en <b>public/video-invitacion.mp4</b></span></div>}
-      </section>
 
       <section className="closing" id="confirmar">
         <Flower2 className="closing-flower"/>
@@ -154,6 +161,7 @@ function App() {
         </div>
       </div>}
     </main>
+    </>
   );
 }
 
